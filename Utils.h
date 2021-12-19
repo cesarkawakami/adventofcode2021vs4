@@ -116,7 +116,8 @@ void bench(const std::string &base_dir, const std::string &display_prefix, const
         auto end = clock::now();
         const std::string &output{oss.str()};
         if (output != expected) {
-            throw std::logic_error{"wrong answer!"};
+            std::cout << "!!! Wrong answer !!!\n";
+            abort();
         }
         timings.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000.);
     }

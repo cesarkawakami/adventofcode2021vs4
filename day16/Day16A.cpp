@@ -2,34 +2,18 @@
 
 namespace Day16A {
 
-int htoi(int x) {
-    if ('0' <= x && x <= '9') {
-        return x - '0';
-    } else {
-        return x - 'A' + 10;
-    }
+char htoi(char x) {
+    char z = (x >> 6) & 1;
+    return (x & 0xf) + (z | (z << 3));
 }
-
-// std::vector<bool> read_input(std::istringstream &is) {
-//     std::vector<bool> rv;
-//     for (char c : is.str()) {
-//         if (('0' <= c && c <= '9') || ('A' <= c && c <= 'F')) {
-//             int v = htoi(c);
-//             rv.push_back(bool(v & 8));
-//             rv.push_back(bool(v & 4));
-//             rv.push_back(bool(v & 2));
-//             rv.push_back(bool(v & 1));
-//         }
-//     }
-//     return rv;
-// }
 
 std::vector<uint64_t> read_input(std::istringstream &is) {
     std::vector<uint64_t> rv;
+    rv.reserve((is.str().length() + 15) / 16);
     uint64_t partial = 0;
     int partial_count = 0;
     for (char c : is.str()) {
-        if (('0' <= c && c <= '9') || ('A' <= c && c <= 'F')) {
+        if (c >= '0') {
             int v = htoi(c);
             if (partial_count >= 64) {
                 rv.push_back(partial);
@@ -46,17 +30,10 @@ std::vector<uint64_t> read_input(std::istringstream &is) {
 }
 
 struct Parser {
-    // const std::vector<bool> &data;
-    // std::vector<bool>::const_iterator it;
-
     const std::vector<uint64_t> &data_v;
     int pos, subpos;
 
     int version_sum = 0;
-
-    // static Parser make(const std::vector<bool> &start) {
-    //     return {start, start.begin(), 0};
-    // }
 
     static Parser make(const std::vector<uint64_t> &start) {
         return {start, 0, 0};
@@ -68,10 +45,6 @@ struct Parser {
         }
         return os;
     }
-
-    // int get() {
-    //     return *it++;
-    // }
 
     int get() {
         int rv = bool(data_v[pos] & (uint64_t{1} << (63 - subpos)));
@@ -87,12 +60,22 @@ struct Parser {
         return pos * 64 + subpos;
     }
 
-    int read(int count) {
-        int x = 0;
-        for (int i = 0; i < count; ++i) {
-            x = (x << 1) | get();
+    int read(const int original_count) {
+        int remaining = original_count;
+        int v = 0;
+        while (remaining) {
+            int chunk_clamp = 64 - subpos;
+            int chunk = std::min(remaining, chunk_clamp);
+            remaining -= chunk;
+            int chunk_bits = (data_v[pos] >> (64 - chunk - subpos)) & ((uint64_t{1} << chunk) - 1);
+            v = (v << chunk) | chunk_bits;
+            subpos += chunk;
+            if (subpos == 64) {
+                subpos = 0;
+                ++pos;
+            }
         }
-        return x;
+        return v;
     }
 
     int64_t parse_packet() {
@@ -118,7 +101,7 @@ struct Parser {
         } else if (type == 7) {
             return parse_operator_pair([](int64_t left, int64_t right) { return left == right; });
         }
-        throw std::logic_error{"unknown operator!"};
+        abort();
     }
 
     int64_t parse_operator_acc(int64_t init, auto acc) {
@@ -136,7 +119,7 @@ struct Parser {
             } else if (current_index == 1) {
                 right = v;
             } else {
-                throw std::logic_error{"invalid current_index"};
+                abort();
             }
             ++current_index;
         });
@@ -189,7 +172,7 @@ auto solve2 = [](std::istringstream &is, std::ostream &os) {
 };
 
 void main() {
-    try {
+    {
         Utils::Tester tester{"day16"};
 
         tester.test("part1", "in-2", "6", solve1);
@@ -209,10 +192,8 @@ void main() {
         tester.test("part2", "in11", "0", solve2);
         tester.test("part2", "in13", "1", solve2);
         tester.test("part2", "in5", "180616437720", solve2);
-    } catch (const std::exception &e) {
-        std::cerr << "ERROR: " << e.what() << "\n";
     }
 
-    Utils::bench("day16", "part2", "in5", "180616437720", 1000000, solve2);
+    Utils::bench("day16", "part2", "in5", "180616437720", 10000, solve2);
 }
 } // namespace Day16A

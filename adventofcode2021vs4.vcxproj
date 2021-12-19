@@ -123,8 +123,6 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <EnableModules>true</EnableModules>
-      <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
       <FloatingPointModel>
       </FloatingPointModel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -143,8 +141,6 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <EnableModules>true</EnableModules>
-      <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
       <FloatingPointModel>
       </FloatingPointModel>
     </ClCompile>
