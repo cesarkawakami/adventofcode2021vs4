@@ -1,0 +1,5 @@
+BasedOnStyle: LLVM
+BreakBeforeBraces: Attach
+ColumnLimit: 0
+IndentWidth: 4
+TabWidth: 4
