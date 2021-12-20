@@ -9,6 +9,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <filesystem>
 
 namespace Utils {
 
@@ -30,10 +31,21 @@ struct WhitespaceCtype : std::ctype<char> {
     }
 };
 
-std::string read_file(const std::string &filename) {
+inline std::string find_filename(const std::string& filename) {
+    if (std::filesystem::exists(filename)) {
+        return filename;
+    } else if (std::filesystem::exists(filename + ".txt")) {
+        return filename + ".txt";
+    } else {
+        std::cerr << "ERROR: Unable to find filename: " << filename << "\n";
+        abort();
+    }
+}
+
+inline std::string read_file(const std::string &filename) {
     const int BUF_SIZE = 100000;
     static char buf[BUF_SIZE];
-    std::ifstream ins(filename);
+    std::ifstream ins(find_filename(filename));
     ins.read(buf, BUF_SIZE - 1);
     buf[ins.gcount()] = 0;
     return std::string{buf};
@@ -139,7 +151,7 @@ void bench(const std::string &base_dir, const std::string &display_prefix, const
     std::cout << "  pMin: " << std::setw(7) << timings[0] << " us\n";
     std::cout << "  p5  : " << std::setw(7) << timings[std::ssize(timings) / 20] << " us\n";
     std::cout << "  p50 : " << std::setw(7) << timings[std::ssize(timings) / 2] << " us\n";
-    std::cout << "  p95 : " << std::setw(7) << timings[std::ssize(timings) - std::ssize(timings) / 20] << " us\n";
+    std::cout << "  p95 : " << std::setw(7) << timings[std::min(std::ssize(timings) - std::ssize(timings) / 20, std::ssize(timings) - 1)] << " us\n";
     std::cout << "  pMax: " << std::setw(7) << timings[std::ssize(timings) - 1] << " us\n";
 }
 
