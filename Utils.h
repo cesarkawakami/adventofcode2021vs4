@@ -103,7 +103,7 @@ struct Tester {
         std::cout << "\n";
         if (!all_ok) {
             std::cout << "FAILED A TEST!\n";
-            abort();
+            exit(1);
         }
     }
 };
