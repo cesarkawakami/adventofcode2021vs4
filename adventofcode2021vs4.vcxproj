@@ -152,16 +152,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="day18\Day18A.cpp" />
+    <ClCompile Include="day19\Day19A.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="day18\Day18A.h" />
+    <ClInclude Include="day19\Day19A.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="day18\in1.txt" />
-    <Text Include="day18\in2.txt" />
+    <Text Include="day19\in1.txt" />
+    <Text Include="day19\in2.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
