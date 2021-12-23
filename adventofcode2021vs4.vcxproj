@@ -153,10 +153,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="day22\Day22A.cpp" />
+    <ClCompile Include="day22\Day22B.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="day22\Day22A.h" />
+    <ClInclude Include="day22\Day22B.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>

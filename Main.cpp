@@ -1,5 +1,5 @@
-#include "day22/Day22A.h"
+#include "day22/Day22B.h"
 
 int main() {
-    Day22A::main();
+    Day22B::main();
 }
