@@ -105,15 +105,15 @@ struct Reactor {
         std::vector<int> xcoords, ycoords, zcoords;
         auto add_three = [](auto &coords, int val) {
             coords.push_back(val);
-            coords.push_back(val + 1);
+            //coords.push_back(val + 1);
         };
         for (const auto &cuboid : cuboids) {
             add_three(xcoords, cuboid.xmin);
-            add_three(xcoords, cuboid.xmax);
+            add_three(xcoords, cuboid.xmax + 1);
             add_three(ycoords, cuboid.ymin);
-            add_three(ycoords, cuboid.ymax);
+            add_three(ycoords, cuboid.ymax + 1);
             add_three(zcoords, cuboid.zmin);
-            add_three(zcoords, cuboid.zmax);
+            add_three(zcoords, cuboid.zmax + 1);
         }
         auto uniqueize = [](auto &coords) {
             std::sort(coords.begin(), coords.end());
@@ -132,7 +132,7 @@ auto solve = [](auto &is, auto &os, int min, int max) {
     int done_count = 0;
     for (const auto &cuboid : cuboids) {
         reactor.ingest_cuboid(cuboid);
-        std::cout << "done: " << done_count++ << " out of " << std::size(cuboids) << "\n";
+        //std::cout << "done: " << done_count++ << " out of " << std::size(cuboids) << "\n";
     }
     os << reactor.on_count(min, max);
 };
