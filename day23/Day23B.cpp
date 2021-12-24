@@ -78,7 +78,7 @@ const std::array<std::array<std::vector<int>, N>, N> calcd_path = []() {
 }();
 
 struct State {
-    std::array<int, M> positions;
+    std::array<char, M> positions;
 
     auto operator<=>(const State &other) const = default;
 
@@ -92,8 +92,8 @@ struct State {
     }
 
     void for_each_next_pos(int pos_idx, auto fn) const {
-        int p = positions[pos_idx];
-        for (int r = 0; r < N; ++r) {
+        char p = positions[pos_idx];
+        for (char r = 0; r < N; ++r) {
             int dist = calcd_dist[p][r];
             if (dist == -1) {
                 continue;
@@ -126,7 +126,7 @@ struct State {
                 continue;
             }
 
-            for_each_next_pos(pos_idx, [&fn, pos_idx, this, &found_final](int next, int dist) {
+            for_each_next_pos(pos_idx, [&fn, pos_idx, this, &found_final](char next, int dist) {
                 State next_state{*this};
                 next_state.positions[pos_idx] = next;
                 if (!is_room[positions[pos_idx]] && !next_state.is_final_pos(pos_idx)) {
@@ -149,7 +149,7 @@ struct State {
                 continue;
             }
 
-            for_each_next_pos(pos_idx, [&fn, pos_idx, this](int next, int dist) {
+            for_each_next_pos(pos_idx, [&fn, pos_idx, this](char next, int dist) {
                 State next_state{*this};
                 next_state.positions[pos_idx] = next;
                 if (!is_room[positions[pos_idx]] && !next_state.is_final_pos(pos_idx)) {
@@ -197,12 +197,18 @@ struct State {
 
     int estimate() const {
         int rv = 0;
+        std::array<int, 4> targets{5, 10, 15, 20};
+        for (int i = 0; i < M; ++i) {
+            if (is_final_pos(i)) {
+                --targets[i / 4];
+            }
+        }
         for (int i = 0; i < M; ++i) {
             if (!is_final_pos(i)) {
                 int best_dist = std::numeric_limits<int>::max();
                 for (int j = 0; j < N; ++j) {
                     if (!is_room[j]) {
-                        int this_dist = calcd_dist[positions[i]][j] + calcd_dist[j][tgt_for_estim[i]];
+                        int this_dist = calcd_dist[positions[i]][j] + calcd_dist[j][targets[i / 4]--];
                         this_dist *= cost_per_step[i];
                         best_dist = std::min(best_dist, this_dist);
                     }
@@ -226,8 +232,8 @@ struct State {
         std::getline(is, lines[0]);
         std::getline(is, lines[3]);
 
-        std::map<char, std::vector<int>> pods;
-        const std::array<std::tuple<int, int, int>, M> cases{{
+        std::map<char, std::vector<char>> pods;
+        const std::array<std::tuple<int, int, char>, M> cases{{
             {0, 3, 2},
             {1, 3, 3},
             {2, 3, 4},
@@ -286,7 +292,10 @@ auto solve2 = [](auto &is, auto &os) {
     //int best_dist = std::numeric_limits<int>::max();
     int best_dist = 100000;
     int best_finalcount = 0;
-    auto go = [&best_dist, &best_finalcount](auto go, const State &state, int dist) {
+    int64_t states_visited = 0;
+    auto go = [&best_dist, &best_finalcount, &states_visited](auto go, const State &state, int dist) {
+        ++states_visited;
+
         int finalcount = 0;
         for (int i = 0; i < M; ++i) {
             if (state.is_final_pos(i)) {
@@ -310,6 +319,8 @@ auto solve2 = [](auto &is, auto &os) {
         });
     };
     go(go, initial, 0);
+
+    std::cout << "total states visited: " << states_visited << "\n";
 
     os << best_dist;
 };
