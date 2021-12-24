@@ -321,6 +321,8 @@ void main() {
         tester.test("part2", "in1", "44169", solve2);
         tester.test("part2", "in2", "46772", solve2);
     }
+
+    Utils::bench("day23", "part2", "in2", "46772", 1, solve2);
 }
 
 } // namespace Day23A
