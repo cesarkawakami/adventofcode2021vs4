@@ -18,7 +18,7 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="day24\Day24A.cpp">
+    <ClCompile Include="day25\Day25A.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,15 +26,12 @@
     <ClInclude Include="Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="day24\Day24A.h">
+    <ClInclude Include="day25\Day25A.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="day24\in1.txt" />
-    <Text Include="day24\scratch.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="day24\parse.py" />
+    <Text Include="day25\in1.txt" />
+    <Text Include="day25\in2.txt" />
   </ItemGroup>
 </Project>
