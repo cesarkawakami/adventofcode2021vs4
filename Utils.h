@@ -113,7 +113,7 @@ void bench(const std::string &base_dir, const std::string &display_prefix, const
     using clock = std::chrono::high_resolution_clock;
 
     std::ostringstream display_name;
-    display_name << display_prefix << ":" << name;
+    display_name << base_dir << ":" << display_prefix << ":" << name;
 
     std::cout << ">=====  BENCH  =====<\n";
     std::cout << "  Running " << iterations << " iterations of " << display_name.str() << "...\n";
